@@ -14,9 +14,6 @@
                 <a class="nav-link" href="route('genre')">{{__('Zsánerek')}}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="route('myBooks')">{{__('Könyveim')}}</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="route('browse')">{{__('Böngészés')}}</a>
               </li>
               <li class="nav-item dropdown">
@@ -39,11 +36,24 @@
                   <li><a class="dropdown-item" href="#">Új lista hozzáadása</a></li>
                 </ul>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{route('ownBooks')}}">{{__('Könyveim')}}</a>
+              </li>
             </ul>
-            <form class="d-flex">
-              <a href="{{route('reg')}}" class="btn btn-primary">{{__('Regisztráció')}}</a>
-              <a href="" class="btn btn-primary"></a>
-            </form>
+            @if(!Auth::user())
+              <div class="d-flex">
+                <a href="{{route('register')}}" class="btn btn-secondary me-2">{{__('Regisztráció')}}</a>
+                <a href="{{route('login')}}" class="btn btn-secondary">{{__('Bejelentkezés')}}</a>
+              </div>
+            @else
+              <div class="d-flex">
+                <a href="{{route('addBook')}}" class="btn btn-secondary me-3">{{__('Új történet')}}</a>
+                <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                  <button class="btn btn-secondary" type="submit">{{__('Kijelentkezés')}}</button>
+                </form>
+              </div>
+            @endif
           </div>
     </div>
 </nav>

@@ -1,4 +1,4 @@
-<footer class="bg-light text-center text-lg-start mx-5">
+<footer class="bg-light text-center text-lg-start mt-auto">
     <!-- Grid container -->
     <div class="container p-4">
       <!--Grid row-->

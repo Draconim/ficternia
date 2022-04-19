@@ -1,11 +1,11 @@
-<div class="mb-3">
+<div class="m-3 mx-5 col-md-4">
     @if ($label)
         <label for="{{ $name }}">
             {{ $label }}
         </label>
     @endif
     <input
-        class="form-control{{ $errors->has($name) ? ' is-invalid' : '' }}"
+        class="form-control border border-dark {{ $errors->has($name) ? ' is-invalid' : '' }}"
         type="{{ $type }}"
         name="{{ $name }}"
         value="{{ old($name, $value) }}"
@@ -16,4 +16,7 @@
             {{ $errors->first($name) }}
         </p>
     @endif
+</div>
+<div class="card">
+    
 </div>
