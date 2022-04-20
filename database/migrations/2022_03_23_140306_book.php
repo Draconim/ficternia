@@ -19,8 +19,11 @@ return new class extends Migration
             $table->string('title');
             $table->string('cover')->nullable();
             $table->text('description');
-            $table->foreignId('genre_id')->unique();
-            $table->foreignId('subGenre_id')->unique();
+            $table->foreignId('genre_id');
+            $table->foreignId('subGenre_id');
+            $table->integer('age_limit');
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('last_updated')->nullable();
             $table->integer('views')->default('0');
         });
     }

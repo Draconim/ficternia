@@ -22,8 +22,9 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 //Book
-Route::get('/Books', [App\Http\Controllers\BookController::class, 'index'])->name('books');
-Route::get('/Books/{genre}', [App\Http\Controllers\BookController::class, 'browwseGenre']);
+Route::get('/Browse', [App\Http\Controllers\BookController::class, 'index'])->name('browse');
+Route::post('/Browse', [App\Http\Controllers\BookController::class, 'search']);
+Route::get('/Browse/{genre}', [App\Http\Controllers\BookController::class, 'browwseGenre']);
 
 //myBooks
 Route::get('/NewBook',[App\Http\Controllers\BookController::class, 'create'])->name('addBook');

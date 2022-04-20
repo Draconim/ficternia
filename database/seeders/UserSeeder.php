@@ -17,5 +17,7 @@ class UserSeeder extends Seeder
     {
         User::create(['username'=>'Draco','name' => 'Laci', 
         'email'=>'example@test.com','password'=>'$2y$10$6kOb7vbQO50kvKKtZhhB9edLWNFPPTzaX309xNXZtoR3iP4Bnz3EG']);
+        User::create(['username'=>'Liverius','name' => 'Laci2', 
+        'email'=>'example2@test.com','password'=>'$2y$10$6kOb7vbQO50kvKKtZhhB9edLWNFPPTzaX309xNXZtoR3iP4Bnz3EG']);
     }
 }

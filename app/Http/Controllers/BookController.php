@@ -20,15 +20,224 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::orderBy('title')->get();
-        return view('browsing.books')->with('books',$books);
+        return view('browsing.browseBooks')->with('books',$books);
     }
 
     public function browseGenre($genre){
         $id = Genre::where("name",'=',$genre)->select('id')->get();
         $books = Book::where("genre_id",'=',$id)->get();
-        return view('browsing.books')->with('books',$books);
+        return view('browsing.browseBooks')->with('books',$books);
     }
 
+    public static function checkAge($data){
+        if($data->has('age18')){
+            return 18;
+        }
+        if($data->has('age16')){
+            return 16;
+        }
+        if($data->has('age14')){
+            return 14;
+        }
+        if($data->has('age12')){
+            return 12;
+        }
+        return 18;
+    }
+    public static function checkOrder($data){
+        if($data->has('orderBy')){
+            if($data->orderBy == "asc"){
+                return "asc";
+            }
+            return "desc";
+        }
+    }
+    public static function checkSort($data){
+        if($data->has('sortBy')){
+            if($data->sortBy == "createdAt"){
+                return "created_at";
+            }
+            if($data->sortBy == "latestUpdate"){
+                return "last_updated";
+            }
+            if($data->sortBy == "title"){
+                return "title";
+            }
+            return "views";
+        }
+    }
+    public static function checkMode($data){
+        if($data->has('searchIn')){
+            if($data->searchIn == "title"){
+                return "title";
+            }
+            if($data->searchIn == "description"){
+                return "description";
+            }
+            return "user";
+        }
+    }
+    private static function getBookFromUser($age,$order,$sort,$text){
+        $users = User::where('username','LIKE','%'.$text.'%')->get();
+        $books;
+        foreach($users as $user){
+            $temp = Book::where('user_id','=',$user->id)->get();
+            if(!isset($books)){
+                $books = $temp;
+            }
+            $final = $books->merge($temp);
+        }
+        switch($age){
+            case 18:
+                if($order=='desc'){
+                    $sortAge = $final->sortByDesc($sort);
+                    return $sortAge;
+                }
+                $sortAge = $final->sortBy($sort);
+                return $sortAge;
+                break;
+            case 16:
+                if($order=='desc'){
+                    $sorting = $final->sortByDesc($sort);
+                    $sortAge = self::sortAge($sorting,16);
+                    return $sortAge;
+                }
+                $sorting = $final->sortBy($sort);
+                $sortAge = self::sortAge($sorting,16);
+                return $sortAge;
+                break;
+            case 14:
+                if($order=='desc'){
+                    $sorting = $final->sortByDesc($sort);
+                    $sortAge = self::sortAge($sorting,14);
+                    return $sortAge;
+                }
+                $sorting = $final->sortBy($sort);
+                $sortAge = self::sortAge($sorting,14);
+                return $sortAge;
+                break;
+            case 12:
+                if($order=='desc'){
+                    $sorting = $final->sortByDesc($sort);
+                    $sortAge = self::sortAge($sorting,12);
+                    return $sortAge;
+                }
+                $sorting = $final->sortBy($sort);
+                $sortAge = self::sortAge($sorting,12);
+                return $sortAge;
+                break;
+        }
+        
+    }
+    private static function getBookByDescription($age,$order,$sort,$text){
+        $books = Book::where('description','LIKE','%'.$text.'%')->get();
+        switch($age){
+            case 18:
+                if($order=='desc'){
+                    $sorting = $books->sortByDesc($sort);
+                    return $sorting;
+                }
+                $sorting = $books->sortBy($sort);
+                return $sorting;
+                break;
+            case 16:
+                if($order=='desc'){
+                    $sorting = $books->sortByDesc($sort);
+                    $sortAge = self::sortAge($sorting,16);
+                    return $sortAge;
+                }
+                $sorting = $books->sortBy($sort);
+                $sortAge = self::sortAge($sorting,16);
+                return $sortAge;
+                break;
+            case 14:
+                if($order=='desc'){
+                    $sorting = $books->sortByDesc($sort);
+                    $sortAge = self::sortAge($sorting,14);
+                    return $sortAge;
+                }
+                $sorting = $books->sortBy($sort);
+                $sortAge = self::sortAge($sorting,14);
+                return $sortAge;
+                break;
+            case 12:
+                if($order=='desc'){
+                    $sorting = $books->sortByDesc($sort);
+                    $sortAge = self::sortAge($sorting,12);
+                    return $sortAge;
+                }
+                $sorting = $books->sortBy($sort);
+                $sortAge = self::sortAge($sorting,12);
+                return $sortAge;
+                break;
+        }
+    }
+    private static function getBookByTitle($age,$order,$sort,$text){
+        $books = Book::where('title','LIKE','%'.$text.'%')->get();
+        switch($age){
+            case 18:
+                if($order=='desc'){
+                    $sorting = $books->sortByDesc($sort);
+                    return $sorting;
+                }
+                $sorting = $books->sortBy($sort);
+                return $sorting;
+                break;
+            case 16:
+                if($order=='desc'){
+                    $sorting = $books->sortByDesc($sort);
+                    $sortAge = self::sortAge($sorting,16);
+                    return $sortAge;
+                }
+                $sorting = $books->sortBy($sort);
+                $sortAge = self::sortAge($sorting,16);
+                return $sortAge;
+                break;
+            case 14:
+                if($order=='desc'){
+                    $sorting = $books->sortByDesc($sort);
+                    $sortAge = self::sortAge($sorting,14);
+                    return $sortAge;
+                }
+                $sorting = $books->sortBy($sort);
+                $sortAge = self::sortAge($sorting,14);
+                return $sortAge;
+                break;
+            case 12:
+                if($order=='desc'){
+                    $sorting = $books->sortByDesc($sort);
+                    $sortAge = self::sortAge($sorting,12);
+                    return $sortAge;
+                }
+                $sorting = $books->sortBy($sort);
+                $sortAge = self::sortAge($sorting,12);
+                return $sortAge;
+                break;
+        }
+    }
+    private static function sortAge($data,$age) {
+        return $data->where('age_limit','<=',$age);
+    }
+    public function search(Request $request){
+        $age = self::checkAge($request);
+        $order = self::checkOrder($request);
+        $sort = self::checkSort($request);
+        $mode= self::checkMode($request);
+        $text = $request->bookSearch;
+    
+        if($mode=="user"){
+            $books = self::getBookFromUser($age,$order,$sort,$text);
+        }
+        if($mode=="description")
+            $books = self::getBookByDescription($age,$order,$sort,$text);
+        if($mode=="title")
+            $books = self::getBookByTitle($age,$order,$sort,$text);
+        
+        
+        return view('browsing.browseBooks')->with('books',$books);
+        
+    }
+    
     /**
      * Show the form for creating a new resource.
      *

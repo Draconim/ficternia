@@ -26,7 +26,6 @@ class HomeController extends Controller
     public function index()
     {
         $books = Book::orderBy('title')->get();
-        
         return view('home')->with('books',$books);
     }
 }

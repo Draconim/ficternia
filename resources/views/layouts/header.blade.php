@@ -14,7 +14,7 @@
                 <a class="nav-link" href="route('genre')">{{__('Zsánerek')}}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="route('browse')">{{__('Böngészés')}}</a>
+                <a class="nav-link" href="{{route('browse')}}">{{__('Böngészés')}}</a>
               </li>
               <li class="nav-item dropdown">
                 <button class="btn btn-link text-decoration-none text-reset dropdown-toggle" type="button" id="navbarDropdown" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
