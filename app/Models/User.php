@@ -11,7 +11,12 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    public function books(){
+        return $this->hasMany(Book::class,'user_id');
+    }
+    public function bookChapters(){
+        return $this->hasManyThrough(Chapter::class,Book::class);
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -43,7 +48,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function books(){
-        return $this->hasMany(Book::class,'user_id');
-    }
+    
+    
 }

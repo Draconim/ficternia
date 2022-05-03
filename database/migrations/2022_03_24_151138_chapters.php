@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 
 return new class extends Migration
 {
@@ -15,12 +16,14 @@ return new class extends Migration
     {
         Schema::create('chapters', function (Blueprint $table){
             $table->id();
-            $table->foreignId('username');
-            $table->string('cp_title');
-            $table->foreignId('bk_id');
+            $table->string('title');
+            $table->string('published')->default('draft');
+            $table->foreignId('book_id');
             $table->longtext('content');
-            $table->boolean('genre_id')->default('0');
-            $table->timestamp('published_at');
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('published_at')->nullable();
+            $table->integer('views')->default('0');
         });
     }
 

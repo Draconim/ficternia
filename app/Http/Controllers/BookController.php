@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Image;
 use Auth;
+use Carbon\Carbon;
 use App\Models\Book;
 use App\Models\Genre;
 use App\Models\subGenre;
@@ -19,13 +20,13 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::orderBy('title')->get();
+        $books = Book::where('published','=','published')->orderBy('title')->get();
         return view('browsing.browseBooks')->with('books',$books);
     }
 
     public function browseGenre($genre){
         $id = Genre::where("name",'=',$genre)->select('id')->get();
-        $books = Book::where("genre_id",'=',$id)->get();
+        $books = Book::where("genre_id",'=',$id)->where('published','=','published')->get();
         return view('browsing.browseBooks')->with('books',$books);
     }
 
@@ -81,7 +82,7 @@ class BookController extends Controller
         $users = User::where('username','LIKE','%'.$text.'%')->get();
         $books;
         foreach($users as $user){
-            $temp = Book::where('user_id','=',$user->id)->get();
+            $temp = Book::where('user_id','=',$user->id)->where('published','=','published')->get();
             if(!isset($books)){
                 $books = $temp;
             }
@@ -130,7 +131,7 @@ class BookController extends Controller
         
     }
     private static function getBookByDescription($age,$order,$sort,$text){
-        $books = Book::where('description','LIKE','%'.$text.'%')->get();
+        $books = Book::where('description','LIKE','%'.$text.'%')->where('published','=','published')->get();
         switch($age){
             case 18:
                 if($order=='desc'){
@@ -173,7 +174,7 @@ class BookController extends Controller
         }
     }
     private static function getBookByTitle($age,$order,$sort,$text){
-        $books = Book::where('title','LIKE','%'.$text.'%')->get();
+        $books = Book::where('title','LIKE','%'.$text.'%')->where('published','=','published')->get();
         switch($age){
             case 18:
                 if($order=='desc'){
@@ -237,7 +238,6 @@ class BookController extends Controller
         return view('browsing.browseBooks')->with('books',$books);
         
     }
-    
     /**
      * Show the form for creating a new resource.
      *
@@ -248,7 +248,7 @@ class BookController extends Controller
         $genres = Genre::orderBy('name')->get();
         $subGenres = subGenre::orderBy('name')->get();
         //dd(compact('genres','subGenres'));
-        return view('publishing.createBook')->with(compact('genres','subGenres'));
+        return view('publishing.books.addUpdateBook')->with(compact('genres','subGenres'));
     }
     /*public function getSubGenres($id){
         dd('alfa');
@@ -274,12 +274,21 @@ class BookController extends Controller
         ]);
         */
         //username, title, cover, description, genre, views
-        $book = Auth::user()->book()->create($request->except('_token'));
+        if($request->has('published'))
+        {
+            $array = $request->all();
+            $array['published'] = $array['published']=='on' ? 'published' : 'draft';
+            $cbook = Auth::user()->books()->create($array+['created_at'=>Carbon::now()->format('Y-m-d H:i:s')]+['last_updated'=>Carbon::now()->format('Y-m-d H:i:s')]+['published_at'=>Carbon::now()->format('Y-m-d H:i:s')]);
+        }
+        else{
+            $array = $request->all();
+            $cbook = Auth::user()->books()->create($array+['created_at'=>Carbon::now()->format('Y-m-d H:i:s')]+['last_updated'=>Carbon::now()->format('Y-m-d H:i:s')]+['published'=>'draft']);
+        }
         $image = $this->uploadImage($request);
 
         if($image){
-            $book->cover = $image->basename;
-            $book->save();
+            $cbook->cover = $image->basename;
+            $cbook->save();
         }
         return redirect()->route('ownBooks');
     }
@@ -296,15 +305,16 @@ class BookController extends Controller
     }
 
     public function myBooks(){
-        $myBooks = Auth::user()->book()->get();
-        return view('publishing.ownBooks')->with('books',$myBooks);
+        $myBooks = Auth::user()->books()->get();
+        return view('publishing.books.ownBooks')->with('books',$myBooks);
     }
+
     public function myBook($id){
-        $myBook = Auth::user()->book()->where('id','=',$id)->get();
-        if ($myBook->username != Auth::user()) {
+        $myBook = Auth::user()->books()->where('id','=',$id)->get();
+        if ($myBook[0]->user_id != Auth::user()->id) {
             return abort(403);
         }
-        return view('publishing.ownBooks',$id)->with('book',$myBook);
+        return view('publishing.books.ownBooks',$id)->with('book',$myBook);
     }
     /**
      * Show the form for editing the specified resource.
@@ -312,9 +322,15 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function edit(Book $book)
+    public function getBook($id)
     {
-        //
+        $myBook = Auth::user()->books()->where('id','=',$id)->get();
+        if ($myBook[0]->user_id != Auth::user()->id) {
+            return abort(403);
+        }
+        $genres = Genre::orderBy('name')->get();
+        $subGenres = subGenre::orderBy('name')->get();
+        return view('publishing.books.addUpdateBook')->with(compact('id','myBook','genres','subGenres'));
     }
 
     /**
@@ -324,20 +340,55 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Book $book)
+    public function update(Request $request, $id)
     {
-        //
+        if($request->has('published')){
+            $array = $request->all();
+            $array['published'] = $array['published']=='on' ? 'published' : 'draft';
+            unset($array['_token']);
+            $book = Book::where('id','=',$id)->update($array+['last_updated'=>Carbon::now()->format('Y-m-d H:i:s')]);
+        }else{
+
+            $book = Book::where('id','=',$id)->update($request->except('_token')+['last_updated'=>Carbon::now()->format('Y-m-d H:i:s')]+['published'=>'draft']);
+        }
+        $image = $this->uploadImage($request);
+        if($image){
+            $book->cover = $image->basename;
+            $book->save();
+        }
+        $myBooks = Auth::user()->books()->get();
+        return redirect()->route('ownBooks')->with('books',$myBooks);
+        
     }
 
+
+    public function publishBook($id){
+        $book = Auth::user()->books()->find($id);
+        $book->published='published';
+        $book->published_at=Carbon::now()->format('Y-m-d H:i:s');
+        $book->save();
+        $myBooks = Auth::user()->books()->get();
+        return redirect()->route('ownBooks')->with('books',$myBooks);
+    }
+    public function unPublishBook($id){
+        $book = Auth::user()->books()->find($id);
+        $book->published='draft';
+        $book->published_at=null;
+        $book->save();
+        $myBooks = Auth::user()->books()->get();
+        return redirect()->route('ownBooks')->with('books',$myBooks);
+    }
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Book $book)
+    public function deleteBook($id)
     {
-        //
+        Book::destroy($id);
+        $myBooks = Auth::user()->books()->get();
+        return redirect()->route('ownBooks')->with('books',$myBooks);
     }
     private function uploadImage(Request $request)
     {

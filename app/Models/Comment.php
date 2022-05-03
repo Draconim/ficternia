@@ -10,6 +10,6 @@ class Comment extends Model
     use HasFactory;
     public $timestamps = false;
     public function comment(){
-        return $this->blongsTo(Chapter::class);
+        return $this->belongsTo(Chapter::class);
     }
 }

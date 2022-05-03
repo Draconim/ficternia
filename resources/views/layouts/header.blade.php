@@ -1,6 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light mx-5 px-5">
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-5 rounded-bottom">
     <div class="container-fluid">
-
         <a href="{{route('home')}}" class="navbar-brand text-uppercase">Fictiernia</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -11,7 +10,7 @@
                 <a class="nav-link active" aria-current="page" href="{{route('home')}}">{{__('Főoldal')}}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="route('genre')">{{__('Zsánerek')}}</a>
+                <a class="nav-link" href="{{route('getGenres')}}">{{__('Zsánerek')}}</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{{route('browse')}}">{{__('Böngészés')}}</a>
