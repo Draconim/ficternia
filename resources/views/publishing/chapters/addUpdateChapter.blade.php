@@ -42,7 +42,7 @@
                         <div class="d-flex flex-column justify-content-center my-2 mx-3">
                             <div class="d-flex flex-row my-2">
                                 <div class=" me-2">
-                                    <input type="checkbox" name="publish" id="publish" {{isset($chapter) ? ($chapter->published=='published' ? 'checked' : '') : ''}}>
+                                    <input type="checkbox" name="published" id="published" {{isset($chapter) ? ($chapter->published=='published' ? 'checked' : '') : ''}}>
                                 </div>
                                 <div>Publikálom</div>
                             </div>

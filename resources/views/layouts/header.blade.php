@@ -20,7 +20,16 @@
                   Olvasólistáim
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li class="dropdown-item dropend">
+                    <button type="button" class="btn btn-link text-decoration-none text-reset dropdown-toggle" id="navbarReadingListButton" data-bs-toggle="dropdown" aria-expanded="false">
+                      Another action
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="navbarReadingListButton">
+                      <li><a class="dropdown-item" href="#">a</a></li>
+                      <li><a class="dropdown-item" href="#">a</a></li>
+                      <li><a class="dropdown-item" href="#">a</a></li>
+                    </ul>
+                  </li>
                   <li class="dropdown-item dropend">
                     <button type="button" class="btn btn-link text-decoration-none text-reset dropdown-toggle" id="navbarReadingListButton" data-bs-toggle="dropdown" aria-expanded="false">
                       Another action

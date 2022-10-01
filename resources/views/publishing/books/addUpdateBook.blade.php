@@ -1,4 +1,22 @@
 @extends('layouts.main')
+@push('scripts')
+<script>
+    window.onload = function(){
+        let subGenresOptions = document.querySelectorAll("#subGenre option")
+
+        document.getElementById("genre").addEventListener("change",function(e){
+            for(let option of subGenresOptions){
+                if(option.dataset.parentId == e.target.value){
+                    option.style.display="block";
+                }else{
+                    option.style.display="none";
+                }
+            }    
+        })
+
+    }
+</script>
+@endpush
 @section('content')
 
 <div class="container-fluid d-grid my-5">
@@ -50,7 +68,7 @@
                                     <select class="form-control border-dark {{ $errors->has('subGenre_id') ? ' is-invalid' : '' }}" name="subGenre_id" id="subGenre">
                                         <option value="">{{ __('Kérlek válassz') }}</option>
                                         @foreach($subGenres as $subGenre)
-                                        <option value="{{ $subGenre->id }}" {{ old('subGenre_id') == $subGenre->id ? 'selected' : '' }} {{isset($myBook[0]) ? ($myBook[0]->subGenre_id==$subGenre->id ? 'selected' : '') : ''}}>
+                                        <option value="{{ $subGenre->id }}" style="display:none" data-parent-id="{{$subGenre->genre_id}}" {{ old('subGenre_id') == $subGenre->id ? 'selected' : '' }} {{isset($myBook[0]) ? ($myBook[0]->subGenre_id==$subGenre->id ? 'selected' : '') : ''}}>
                                             {{ $subGenre->name }}
                                         </option>
                                         @endforeach

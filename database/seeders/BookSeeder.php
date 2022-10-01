@@ -16,7 +16,7 @@ class BookSeeder extends Seeder
      */
     public function run()
     {
-        Book::create(['user_id' => 1,'title'=>'Sárkányfi16', 'published' => 'published', 'cover'=>'{625ed5ca17338}.png',
+        Book::create(['user_id' => 1,'title'=>'Sárkányfi16HP', 'published' => 'published', 'cover'=>'{625ed5ca17338}.png',
         'description'=>'Egy világ, mely fölött sárkányok uralkodnak. A legkülönfélébb méretben, s színekben pompázó pikkelyes, tüzet okádó hüllők. Ezek a csodálatos, ám nagyon veszélyes lények őrzik a városokat, és tartják fent a rendet. Sokan azt gondolják, hogy ez a rendszer tökéletes. Azonban csak igen kevesen sejtik csak, hogy ez nem teljesen van így. 
 
         Az ifjú William Jake Stonewing élete egy nap gyökeresen megváltozik. Rég elfeledett titkok és technikák kerülnek napvilágra - köztük egy igen veszélyes családi titok is. Elég kitartó lesz-e Jake ahhoz, hogy szembenézzen mindazzal, ami rá vár? És elég fontos lesz-e neki szerelme ahhoz, hogy olyan dolgokat tegyen meg, amelyet eddig még senkinek sem sikerült? Hamarosan kiderül....

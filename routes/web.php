@@ -21,17 +21,21 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//Book
+//Browse and view books
 Route::get('/Browse', [App\Http\Controllers\BookController::class, 'index'])->name('browse');
 Route::post('/Browse', [App\Http\Controllers\BookController::class, 'search']);
-Route::post('/Browse/{id}', [App\Http\Controllers\BookController::class, 'getBook'])->name("getBook");
-Route::get('/Browse/{genre}', [App\Http\Controllers\BookController::class, 'browwseGenre']);
+Route::get('/Browse/{id}', [App\Http\Controllers\ChapterController::class, 'getBookChapters'])->name('getBookChapters');
+Route::get('/Browse/{genre}', [App\Http\Controllers\BookController::class, 'browseGenre'])->name('browseGenre');
+Route::get('/{book_id}/{id}',[App\Http\Controllers\ChapterController::class, 'ChapterReading'])->name('readChapter');
+Route::post('/{book_id}/{id}',[App\Http\Controllers\CommentController::class, 'store']);
+
+
 
 //myBooks
 Route::get('/NewBook/getSubGenre/{id}',[App\Http\Controllers\BookController::class, 'getSubGenre'])->name('fetchSubGenre');
 Route::post('/NewBook',[App\Http\Controllers\BookController::class, 'store']);
 Route::get('/MyBooks',[App\Http\Controllers\BookController::class, 'myBooks'])->name('ownBooks');
-Route::get('/MyBooks/{id}',[App\Http\Controllers\BookController::class, 'myBook'])->name('ownBook');
+
 //CRUD
 Route::get('/NewBook',[App\Http\Controllers\BookController::class, 'create'])->name('addBook');
 Route::get('/MyBooks/changeBook/{id}',[App\Http\Controllers\BookController::class, 'getBook'])->name('changeBook');

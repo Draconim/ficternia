@@ -24,6 +24,7 @@ class BookController extends Controller
         return view('browsing.browseBooks')->with('books',$books);
     }
 
+
     public function browseGenre($genre){
         $id = Genre::where("name",'=',$genre)->select('id')->get();
         $books = Book::where("genre_id",'=',$id)->where('published','=','published')->get();
@@ -308,7 +309,7 @@ class BookController extends Controller
         $myBooks = Auth::user()->books()->get();
         return view('publishing.books.ownBooks')->with('books',$myBooks);
     }
-
+/*
     public function myBook($id){
         $myBook = Auth::user()->books()->where('id','=',$id)->get();
         if ($myBook[0]->user_id != Auth::user()->id) {
@@ -316,6 +317,7 @@ class BookController extends Controller
         }
         return view('publishing.books.ownBooks',$id)->with('book',$myBook);
     }
+    */
     /**
      * Show the form for editing the specified resource.
      *

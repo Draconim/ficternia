@@ -92,7 +92,7 @@
                 <div class="col my-2">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex flex-row ">
+                            <a href="{{route('getBookChapters',$book->id)}}" class="text-reset text-decoration-none d-flex flex-row ">
                                 <div class="d-flex flex-column">
                                     <img src="images\covers\{{$book->cover}}" alt="{{$book->title}}" height="300px" class="mt-0 mx-auto">
                                 </div>
@@ -112,7 +112,7 @@
                                         <div class="mx-1">Frissítve: {{date('Y-m-d',strtotime($book->last_updated))}}</div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>

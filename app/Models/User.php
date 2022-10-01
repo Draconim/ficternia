@@ -17,6 +17,9 @@ class User extends Authenticatable
     public function bookChapters(){
         return $this->hasManyThrough(Chapter::class,Book::class);
     }
+    public function comments(){
+        return $this->hasMany(Comment::class,'user_id');
+    }
     /**
      * The attributes that are mass assignable.
      *

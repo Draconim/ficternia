@@ -15,9 +15,8 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table){
             $table->id();
-            $table->foreignId('username');
+            $table->foreignId('user_id');
             $table->foreignId('cp_id');
-            $table->foreignId('bk_id');
             $table->string('content');
         });
     }
